@@ -5,28 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.Navigation
+import kotlinx.android.synthetic.main.fragment_main.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MainFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MainFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    var val1=0;
+    var val2=0;
+    var poin=0;
+    fun loadQuestion(){
+        val1=(0..100).random()
+        val2=(0..100).random()
+        txtSoal.text="$val1 + $val2"
     }
 
     override fun onCreateView(
@@ -37,23 +29,22 @@ class MainFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MainFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MainFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadQuestion()
+        btnSubmit.setOnClickListener{
+            if(txtJawaban.text.toString().toInt()==val1+val2){
+                poin++;
+                Toast.makeText(context,"poin saat ini $poin",Toast.LENGTH_SHORT).show()
+                loadQuestion()
+                txtJawaban.setText("")
+            }else{
+                val action=MainFragmentDirections.actionGameFragment(poin)
+                Navigation.findNavController(it).navigate(action)
+
             }
+
+        }
     }
+
 }
